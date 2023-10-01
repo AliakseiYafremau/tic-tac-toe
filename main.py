@@ -117,7 +117,14 @@ def game():
         else:
             current_player = 1
 
+    print(output(field))
 
+    winner = is_win(field)
+
+    if winner:
+        print('Победили {}!!!'.format(player_to_name(winner)))
+    else:
+        print('Перед нами ничья!!!')
 
 
 
