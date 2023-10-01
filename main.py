@@ -3,6 +3,7 @@ def is_cell_occupied(field, cell):
         return True
     return False
 
+
 def player_to_name(current_player):
     if current_player == 1:
         return 'крестики'
@@ -10,7 +11,7 @@ def player_to_name(current_player):
         return 'нолики'
 
 
-def converted_list_to_field(lst:list):
+def converted_list_to_field(lst: list):
     for el in range(len(lst)):
         if lst[el] == 0:
             lst[el] = ' '
@@ -21,20 +22,34 @@ def converted_list_to_field(lst:list):
     return lst
 
 
-def output(lst:list, convert=True):# вывод поля в консоль
-    if convert:
-        lst = converted_list_to_field(lst.copy())
-    field = '   |   |   \n' \
-            ' {0} | {1} | {2} \n' \
-            '   |   |   \n' \
-            '---+---+---\n' \
-            '   |   |   \n' \
-            ' {3} | {4} | {5} \n' \
-            '   |   |   \n' \
-            '---+---+---\n' \
-            '   |   |   \n' \
-            ' {6} | {7} | {8}\n' \
-            '   |   |   '.format(*lst)
+def output(lst: list, do_reference=True):# вывод поля в консоль
+    indetation = 10
+    reference = range(1, 10)
+    lst = converted_list_to_field(lst.copy())
+    if do_reference:
+        field = '   |   |                |   |   \n'\
+                ' {0} | {1} | {2}            {9} | {10} | {11} \n' \
+                '   |   |                |   |   \n' \
+                '---+---+---          ---+---+---\n' \
+                '   |   |                |   |   \n' \
+                ' {3} | {4} | {5}            {12} | {13} | {14} \n' \
+                '   |   |                |   |   \n' \
+                '---+---+---          ---+---+---\n' \
+                '   |   |                |   |   \n' \
+                ' {6} | {7} | {8}            {15} | {16} | {17} \n' \
+                '   |   |                |   |   '.format(*lst, *reference)
+    else:
+        field = '   |   |   \n' \
+                ' {0} | {1} | {2} \n' \
+                '   |   |   \n' \
+                '---+---+---\n' \
+                '   |   |   \n' \
+                ' {3} | {4} | {5} \n' \
+                '   |   |   \n' \
+                '---+---+---\n' \
+                '   |   |   \n' \
+                ' {6} | {7} | {8}\n' \
+                '   |   |   '.format(*lst)
     return field
 
 
@@ -67,17 +82,16 @@ def is_win(field):
     return False
 
 
-
-
-
 # Пустое поле = 0, Крестики = 1, Нолики = 2
 def game():
+    field = [0, 0, 0,
+             0, 0, 0,
+             0, 0, 0]  # не использовал двумерные массивы, чтоб избежать циклов в циклах
     print('Игра началась')
     print('Справка: для выбора поля используйте цифры от 1 до 9:')
-    print(output([x for x in range(1, 10)], False))
+    print(output(field))
     print('Для хода нужно вписать цифру и нажать Enter')
 
-    current_player = None
     while True: # не использовал условие тут, так как хотел реализовать вывод ошибки
         print('Кто будет ходить первым?')
         current_player = input('Крестики: "1", Нолики: "2"\n')
@@ -89,10 +103,6 @@ def game():
 
     current_player = int(current_player)
 
-    field = [0, 0, 0,
-             0, 0, 0,
-             0, 0, 0] # не использовал двумерные массивы, чтоб избежать циклов в циклах
-
     while (not is_draw(field)) and (not is_win(field)):
         while True:
             print('Ходят {}:'.format(player_to_name(current_player)))
@@ -100,7 +110,7 @@ def game():
             move = input('Введите свой ход: ')
             if move.isnumeric(): # введено ли число
                 move = int(move)
-                if move in range(1, 9 + 1): # введена ли цифра
+                if move in range(1, 10): # введена ли цифра
                     if not field[move - 1]: # занята ли клетка
                         break
                     else:
@@ -125,7 +135,6 @@ def game():
         print('Победили {}!!!'.format(player_to_name(winner)))
     else:
         print('Перед нами ничья!!!')
-
 
 
 game()
